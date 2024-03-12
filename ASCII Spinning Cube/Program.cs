@@ -6,8 +6,10 @@
 		private const int CubeSideLength = 10;
 		static void Main(string[] args)
 		{
+			Console.CursorVisible = false;
+
 			var cube = new Cube(CubeSideLength, stopSignal);
-			var cubeThread = new Thread(new ThreadStart(cube.draw));
+			var cubeThread = new Thread(new ThreadStart(cube.Draw));
 			cubeThread.Start();
 
 			ConsoleKey key;
