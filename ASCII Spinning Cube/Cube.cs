@@ -1,4 +1,6 @@
-﻿namespace ASCII_Spinning_Cube
+﻿using System.Threading;
+
+namespace ASCII_Spinning_Cube
 {
 	public class Cube
 	{
@@ -63,16 +65,20 @@
 			{
 				for (var cubeY = -sideLength; cubeY < sideLength; cubeY++)
 				{
-					AddSurfaces(new Point { X = cubeX, Y = cubeY, Z = -sideLength }, '=');
-					AddSurfaces(new Point { X = sideLength, Y = cubeY, Z = cubeX }, '\\');
-					AddSurfaces(new Point { X = -sideLength, Y = cubeY, Z = -cubeX }, '#');
-					AddSurfaces(new Point { X = -cubeX, Y = cubeY, Z = sideLength }, '%');
-					AddSurfaces(new Point { X = cubeX, Y = -sideLength, Z = -cubeY }, '&');
-					AddSurfaces(new Point { X = cubeX, Y = sideLength, Z = cubeY }, '~');
+					AddPoint(new Point { X = cubeX, Y = cubeY, Z = -sideLength }, false, '=');
+					AddPoint(new Point { X = sideLength, Y = cubeY, Z = cubeX }, false, '\\');
+					AddPoint(new Point { X = -sideLength, Y = cubeY, Z = -cubeX }, false, '#');
+					AddPoint(new Point { X = -cubeX, Y = cubeY, Z = sideLength }, false, '%');
+					AddPoint(new Point { X = cubeX, Y = -sideLength, Z = -cubeY }, false, '&');
+					AddPoint(new Point { X = cubeX, Y = sideLength, Z = cubeY }, false, '~');
 				}
 			}
 
-			AddVerticles(' ');
+			for (int i = 0; i < vertices.Length; i++)
+			{
+				AddPoint(vertices[i], true, ' ');
+			}
+
 			renderer.OutputCube(fieldWidth, fieldHeight, buffer);
 			IncrementAngle();
 
@@ -83,7 +89,7 @@
 			}
 		}
 
-		private void AddSurfaces(Point p, char ch)
+		private void AddPoint(Point p, bool isVertex, char ch)
 		{
 			var x = point.RotateX(p, angleX, angleY, angleZ);
 			var y = point.RotateY(p, angleX, angleY, angleZ);
@@ -94,7 +100,7 @@
 			var screenY = point.ConvertToScreenY(y, ooz, fieldHeight, scaleCoefficient);
 			var index = screenY * fieldWidth + screenX;
 
-			if (index >= 0 && index < buffer.Length)
+			if (index >= 0 && index < buffer.Length && !isVertex)
 			{
 				if (ooz > zBuffer[index])
 				{
@@ -102,28 +108,12 @@
 					buffer[index] = ch;
 				}
 			}
-		}
-
-		private void AddVerticles(char ch)
-		{
-			for (int i = 0; i < vertices.Length; i++)
+			else if (isVertex) 
 			{
-				var x = point.RotateX(vertices[i], angleX, angleY, angleZ);
-				var y = point.RotateY(vertices[i], angleX, angleY, angleZ);
-				var z = point.RotateZ(vertices[i], angleX, angleY, angleZ) + cameraDistance;
+				buffer[index] = ch;
 
-				var ooz = 1 / (z + cameraDistance); //perspective factor
-				var screenX = point.ConvertToScreenX(x, ooz, fieldWidth, scaleCoefficient);
-				var screenY = point.ConvertToScreenY(y, ooz, fieldHeight, scaleCoefficient);
-				int index = screenY * fieldWidth + screenX;
-
-				if (index >= 0 && index < buffer.Length)
-				{
-					buffer[index] = ch;
-
-					var circleRadius = 270 * ooz;
-					DrawCircle(screenX, screenY, (int)circleRadius, 'o');
-				}
+				var circleRadius = 270 * ooz;
+				DrawCircle(screenX, screenY, (int)circleRadius, 'o');
 			}
 		}
 
