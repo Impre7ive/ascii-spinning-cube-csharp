@@ -3,12 +3,11 @@
 	public class Program
 	{
 		private static ManualResetEvent stopSignal = new ManualResetEvent(false);
-		private const int CubeSideLength = 20;
 		static void Main(string[] args)
 		{
 			Console.CursorVisible = false;
 
-			var cube = new Cube(CubeSideLength, stopSignal);
+			var cube = new Cube(stopSignal);
 			var cubeThread = new Thread(new ThreadStart(cube.Draw));
 			cubeThread.Start();
 
@@ -19,13 +18,7 @@
 				key = Console.ReadKey(true).Key;
 
 				switch (key)
-				{
-					case ConsoleKey.UpArrow:
-						cube.changeDirection(ConsoleKey.UpArrow); 
-						break;
-					case ConsoleKey.DownArrow:
-						cube.changeDirection(ConsoleKey.DownArrow);
-						break;					
+				{				
 					case ConsoleKey.LeftArrow:
 						cube.changeDirection(ConsoleKey.LeftArrow);
 						break;					

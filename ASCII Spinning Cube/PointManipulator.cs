@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ASCII_Spinning_Cube
+﻿namespace ASCII_Spinning_Cube
 {
 	public class PointManipulator
 	{
@@ -29,14 +22,14 @@ namespace ASCII_Spinning_Cube
 				   p.Y * (Math.Sin(angleX) * Math.Cos(angleY)) +
 				   p.Z * (Math.Cos(angleX) * Math.Cos(angleY));
 		}
-		public int ConvertToScreenX(double x, double z, int fieldWidth, int scaleCoefficient)
+		public int ConvertToScreenX(double x, double ooz, int fieldWidth, int scaleCoefficient)
 		{
-			return (int)(fieldWidth / 2 + x * 1 / z * scaleCoefficient * 2);
+			return (int)(fieldWidth / 2 + x * ooz * scaleCoefficient * 2);
 		}
 
-		public int ConvertToScreenY(double y, double z, int fieldHeight, int scaleCoefficient)
+		public int ConvertToScreenY(double y, double ooz, int fieldHeight, int scaleCoefficient)
 		{
-			return (int)(fieldHeight / 2 + y * 1 / z * scaleCoefficient);
+			return (int)(fieldHeight / 2 + y * ooz * scaleCoefficient);
 		}
 	}
 }
