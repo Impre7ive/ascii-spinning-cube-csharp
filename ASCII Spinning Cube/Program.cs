@@ -3,7 +3,7 @@
 	public class Program
 	{
 		private static ManualResetEvent stopSignal = new ManualResetEvent(false);
-		private const int CubeSideLength = 10;
+		private const int CubeSideLength = 20;
 		static void Main(string[] args)
 		{
 			Console.CursorVisible = false;
